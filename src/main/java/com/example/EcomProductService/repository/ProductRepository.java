@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
     Product findProductByTitle(String name);
-    List<Product> findProductBetween(double min, double max);
+    List<Product> findProductByPriceBetween(double min, double max);
 }

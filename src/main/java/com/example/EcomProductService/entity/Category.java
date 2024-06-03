@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "ECOM_CATEGORY")
 public class Category extends BaseModel {
     private String categoryName;
     @OneToMany

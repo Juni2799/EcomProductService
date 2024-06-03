@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<ProductResponseDTO> getProducts(double minPrice, double maxPrice) {
-        List<Product> productsBetweenRange = productRepository.findProductBetween(minPrice, maxPrice);
+        List<Product> productsBetweenRange = productRepository.findProductByPriceBetween(minPrice, maxPrice);
         return ProductEntityDTOMapper.convertProductListEntityToProductResponseDTOList(productsBetweenRange);
     }
 }
