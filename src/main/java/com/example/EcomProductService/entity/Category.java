@@ -12,6 +12,6 @@ import java.util.List;
 @Entity(name = "ECOM_CATEGORY")
 public class Category extends BaseModel {
     private String categoryName;
-    @OneToMany
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 }
