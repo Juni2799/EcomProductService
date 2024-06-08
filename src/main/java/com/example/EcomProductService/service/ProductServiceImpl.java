@@ -4,6 +4,8 @@ import com.example.EcomProductService.dto.CreateProductRequestDTO;
 import com.example.EcomProductService.dto.ProductResponseDTO;
 import com.example.EcomProductService.entity.Category;
 import com.example.EcomProductService.entity.Product;
+import com.example.EcomProductService.exception.CategorytNotFoundException;
+import com.example.EcomProductService.exception.ProductNotFoundException;
 import com.example.EcomProductService.mapper.ProductEntityDTOMapper;
 import com.example.EcomProductService.repository.CategoryRepository;
 import com.example.EcomProductService.repository.ProductRepository;
@@ -34,7 +36,9 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductResponseDTO getProductById(UUID productId) {
-        Product product = productRepository.findById(productId).get();
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ProductNotFoundException("No product found with id: " + productId)
+        );
         return ProductEntityDTOMapper.convertProductEntityToProductResponseDTO(product);
     }
 
@@ -42,7 +46,9 @@ public class ProductServiceImpl implements ProductService{
     public ProductResponseDTO createProduct(CreateProductRequestDTO createProductRequestDTO) {
         Product product = ProductEntityDTOMapper.convertProductRequestDTOToProductEntity(createProductRequestDTO);
 
-        Category savedCategory = categoryRepository.findById(createProductRequestDTO.getCategoryId()).get();
+        Category savedCategory = categoryRepository.findById(createProductRequestDTO.getCategoryId()).orElseThrow(
+                () -> new CategorytNotFoundException("No category found with id: " + createProductRequestDTO.getCategoryId())
+        );
         product.setCategory(savedCategory);
         Product savedProduct = productRepository.save(product);
 
@@ -56,7 +62,9 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductResponseDTO updateProduct(UUID productId, CreateProductRequestDTO createProductRequestDTO) {
-        Product savedProduct = productRepository.findById(productId).get();
+        Product savedProduct = productRepository.findById(productId).orElseThrow(
+                () -> new ProductNotFoundException("No product found with id: " + productId)
+        );
         savedProduct.setTitle(createProductRequestDTO.getTitle());
         savedProduct.setImageURL(createProductRequestDTO.getImageURL());
         savedProduct.setDescription(createProductRequestDTO.getDescription());

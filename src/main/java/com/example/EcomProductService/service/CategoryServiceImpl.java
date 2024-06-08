@@ -4,6 +4,7 @@ import com.example.EcomProductService.dto.CategoryResponseDTO;
 import com.example.EcomProductService.dto.CreateCategoryRequestDTO;
 import com.example.EcomProductService.entity.Category;
 import com.example.EcomProductService.entity.Product;
+import com.example.EcomProductService.exception.CategorytNotFoundException;
 import com.example.EcomProductService.mapper.CategoryEntityDTOMapper;
 import com.example.EcomProductService.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDTO getCategoryById(UUID categoryId) {
-        Category savedCategory = categoryRepository.findById(categoryId).get();
+        Category savedCategory = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new CategorytNotFoundException("No category found with id: " + categoryId)
+        );
         return CategoryEntityDTOMapper.convertCategoryEntityToCategoryResponseDTO(savedCategory);
     }
 
@@ -45,7 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDTO updateCategory(UUID categoryId, CreateCategoryRequestDTO createCategoryRequestDTO) {
-        Category category = categoryRepository.findById(categoryId).get();
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new CategorytNotFoundException("No category found with id: " + categoryId)
+        );
         category.setCategoryName(createCategoryRequestDTO.getCategoryName());
         Category savedCategory = categoryRepository.save(category);
         return CategoryEntityDTOMapper.convertCategoryEntityToCategoryResponseDTO(savedCategory);
@@ -59,7 +64,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public double getTotalPriceForCategory(UUID categoryId) {
-        Category savedcategory = categoryRepository.findById(categoryId).get();
+        Category savedcategory = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new CategorytNotFoundException("No category found with id: " + categoryId)
+        );
         List<Product> products = savedcategory.getProducts();
 
         if(products == null){

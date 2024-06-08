@@ -2,6 +2,7 @@ package com.example.EcomProductService.controller;
 
 import com.example.EcomProductService.dto.CategoryResponseDTO;
 import com.example.EcomProductService.dto.CreateCategoryRequestDTO;
+import com.example.EcomProductService.exception.InvalidInputException;
 import com.example.EcomProductService.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable(name = "categoryId") UUID id){
+        if(id == null){
+            throw new InvalidInputException("Input given is invalid!!");
+        }
         CategoryResponseDTO categoryResponseDTO = categoryService.getCategoryById(id);
         return ResponseEntity.ok(categoryResponseDTO);
     }
@@ -30,6 +34,9 @@ public class CategoryController {
 
     @GetMapping("/price/{categoryId}")
     public ResponseEntity<Double> getTotalPriceByCategory(@PathVariable(name = "categoryId") UUID id){
+        if(id == null){
+            throw new InvalidInputException("Input given is invalid!!");
+        }
         double totalPriceByCategory = categoryService.getTotalPriceForCategory(id);
         return ResponseEntity.ok(totalPriceByCategory);
     }

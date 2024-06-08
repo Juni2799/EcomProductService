@@ -2,6 +2,7 @@ package com.example.EcomProductService.controller;
 
 import com.example.EcomProductService.dto.CreateProductRequestDTO;
 import com.example.EcomProductService.dto.ProductResponseDTO;
+import com.example.EcomProductService.exception.InvalidInputException;
 import com.example.EcomProductService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,17 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable(value = "productId") UUID id){
+        if(id == null){
+            throw new InvalidInputException("Input given is invalid!!");
+        }
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping("/{productName}")
     public ResponseEntity<ProductResponseDTO> getProductByName(@PathVariable(name = "productName") String name){
+        if(name == null){
+            throw new InvalidInputException("Input given is invalid!!");
+        }
         return ResponseEntity.ok(productService.getProductByName(name));
     }
 
